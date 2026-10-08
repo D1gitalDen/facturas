@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigitalDen · Recibo y factura</title>
+<style>
+:root{--bg:#F4ECF8;--card:#fff;--tx:#2B2630;--mut:#6B6473;--bd:#E3D3EA;--navy:#17151A;--cy:#D9A6EA;--pk:#A84CC0;--vi:#7B2A91;--in:#F4ECF8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17151A;--card:#211C27;--tx:#F2ECF6;--mut:#C9B5D6;--bd:#3A2C45;--in:#1B1721}}
+:root[data-theme="dark"]{--bg:#17151A;--card:#211C27;--tx:#F2ECF6;--mut:#C9B5D6;--bd:#3A2C45;--in:#1B1721}
+*{box-sizing:inherit}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--navy);color:#fff;padding:22px 16px;text-align:center;border-bottom:3px solid var(--pk)}
+header h1{margin:0;font-size:26px;letter-spacing:2px}header h1 span{color:var(--cy)}
+header p{margin:4px 0 0;color:#C9B5D6;font-size:13px}
+main{max-width:980px;margin:0 auto;padding:16px;display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:820px){main{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+h2{margin:0 0 10px;font-size:15px;color:var(--vi);text-transform:uppercase;letter-spacing:1px}
+label{display:block;font-size:12.5px;color:var(--mut);margin:9px 0 3px}
+input,select{width:100%;padding:10px;border-radius:9px;border:1px solid var(--bd);background:var(--in);color:var(--tx);font:inherit}
+input:focus,select:focus{outline:2px solid var(--cy)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.chk{display:flex;gap:9px;align-items:center;margin:8px 0;font-size:14px}.chk input{width:auto}
+button{cursor:pointer;border:0;border-radius:10px;padding:11px 14px;font:inherit;font-weight:700;background:var(--vi);color:#fff}
+button.alt{background:var(--pk)}button.ghost{background:transparent;color:var(--vi);border:1px solid var(--vi)}
+.li{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--bd);font-size:14px}.li b{flex:1}
+.q{width:62px}.x{padding:4px 9px;background:transparent;color:var(--pk);border:1px solid var(--pk)}
+.rc{background:#fff;color:#111;border-radius:6px;padding:20px 18px;max-width:420px;margin:0 auto;font:13px/1.55 ui-monospace,Menlo,Consolas,monospace;
+box-shadow:0 8px 24px rgba(0,0,0,.25);border-top:6px solid var(--pk);display:none}
+.rc .c{text-align:center}.rc .logo{font:900 22px system-ui,sans-serif;letter-spacing:3px;color:#17151A}.rc .logo span{color:#7B2A91}
+.rc hr{border:0;border-top:1px dashed #999;margin:10px 0}.rc .r{display:flex;justify-content:space-between;gap:8px}
+.rc .t{font-weight:800;font-size:16px}.rc .stamp{display:inline-block;border:2px solid #A84CC0;color:#A84CC0;padding:2px 10px;font-weight:800;transform:rotate(-6deg);margin-top:8px}
+.mut{color:var(--mut);font-size:13px}.err{color:var(--pk);font-size:13px;min-height:18px;margin-top:6px}
+.h{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px dashed var(--bd);font-size:13.5px;cursor:pointer}
+.kpi{display:flex;gap:10px;margin-bottom:8px}.kpi div{flex:1;background:var(--navy);color:#fff;border-radius:10px;padding:10px}.kpi small{color:#C9B5D6;display:block;font-size:11.5px}.kpi b{color:var(--cy);font-size:18px}
+</style></head><body>
+<header><h1>DigitalDen <span>RECIBOS</span></h1><p>The Home Of Electrics · Recibo y factura de venta · Los Santos, San Andreas</p></header>
+<main>
+<section class="card"><h2>1 · Datos de la venta</h2>
+ <div class="row"><div><label>Cliente</label><input id="cli" placeholder="Nombre del cliente"></div><div><label>ID / NIF de rol</label><input id="nif" placeholder="Opcional"></div></div>
+ <div class="row"><div><label>Atiende</label><input id="emp" placeholder="Empleado DigitalDen"></div>
+ <div><label>Documento</label><select id="doc"><option>Recibo</option><option>Factura</option></select></div></div>
+ <div class="row"><div><label>Forma de pago</label><select id="pay"><option>Efectivo</option><option>Tarjeta bancaria</option><option>Transferencia</option></select></div>
+ <div><label>Impuesto</label><select id="tax"><option value="0">Sin impuesto</option><option value="0.07">7%</option><option value="0.1">10%</option></select></div></div>
+ <div class="chk"><input type="checkbox" id="card"><label for="card" style="margin:0;color:inherit;font-size:14px">Tarjeta DigitalDen (-5%)</label></div>
+</section>
+<section class="card"><h2>2 · Artículos</h2>
+ <div class="row"><select id="cat" style="flex:2"></select><input id="qty" class="q" type="number" min="1" value="1" style="flex:.5"><button id="add" type="button" style="flex:.6">Añadir</button></div>
+ <div class="row" style="margin-top:8px"><input id="cn" placeholder="Artículo personalizado"><input id="cp" type="number" min="0" placeholder="Precio $" style="flex:.6"><button class="ghost" id="addc" type="button" style="flex:.5">+</button></div>
+ <div id="items" style="margin-top:8px"></div>
+ <div class="err" id="err"></div>
+ <button class="alt" id="make" type="button" style="width:100%">Emitir documento</button>
+</section>
+<section class="full"><div class="rc" id="rc"></div>
+ <div class="row" id="acts" style="max-width:420px;margin:12px auto 0;display:none"><button id="copy" type="button">Copiar</button></div></section>
+<section class="card full"><h2>Caja del día</h2>
+ <div class="kpi"><div><small>Documentos hoy</small><b id="kn">0</b></div><div><small>Ventas hoy</small><b id="kt">$0</b></div></div>
+ <div class="mut" id="empty">Aún no hay ventas registradas.</div><div id="hist"></div>
+ <button class="ghost" id="clear" type="button" style="margin-top:10px">Vaciar caja</button>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const CAT=[["DEN One",450],["DEN Pulse",1200],["DEN Phantom",3500],["Alta de línea",50],["Funda morada",60],["Auriculares Glow",150],["Cargador rápido",70],["Power bank",120],["Seguro pantalla y agua",120],["Reparación de pantalla",250],["Cambio de batería",120],["Reparación por agua",400]];
+const money=n=>"$"+(Math.round(n*100)/100).toLocaleString("es-ES",{minimumFractionDigits:0,maximumFractionDigits:2});
+CAT.forEach((c,i)=>$("cat").add(new Option(c[0]+" — "+money(c[1]),i)));
+let items=[],sales=[],seq=1;
+try{const s=JSON.parse(localStorage.getItem("digitalden_sales")||localStorage.getItem("volt_sales")||"{}");sales=s.sales||[];seq=s.seq||1}catch(e){}
+const save=()=>{try{localStorage.setItem("digitalden_sales",JSON.stringify({sales,seq}))}catch(e){}};
+const pad=n=>String(n).padStart(4,"0");
+function totals(){
+ const sub=items.reduce((a,i)=>a+i.p*i.q,0),dis=$("card").checked?sub*.05:0,base=sub-dis,tax=base*+$("tax").value;
+ return{sub,dis,tax,tot:base+tax};
+}
+function drawItems(){
+ $("items").innerHTML=items.map((it,i)=>`<div class="li"><b>${it.n}</b><span>${it.q} x ${money(it.p)}</span><button class="x" data-i="${i}" type="button">✕</button></div>`).join("")||'<div class="mut">Añade artículos a la venta.</div>';
+ document.querySelectorAll(".x").forEach(e=>e.onclick=()=>{items.splice(+e.dataset.i,1);drawItems()});
+ const t=totals();if(items.length)$("items").insertAdjacentHTML("beforeend",`<div class="li"><b>Total</b><b style="flex:0;color:var(--pk);font-size:17px">${money(t.tot)}</b></div>`);
+}
+function add(n,p,q){const f=items.find(i=>i.n===n&&i.p===p);f?f.q+=q:items.push({n,p,q});drawItems()}
+$("add").onclick=()=>{const c=CAT[$("cat").value];add(c[0],c[1],Math.max(1,+$("qty").value||1))};
+$("addc").onclick=()=>{if(!$("cn").value.trim()||!(+$("cp").value>0)){$("err").textContent="Pon nombre y precio del artículo.";return}$("err").textContent="";add($("cn").value.trim(),+$("cp").value,1);$("cn").value="";$("cp").value=""};
+$("card").onchange=$("tax").onchange=drawItems;
+function build(d){
+ const L=d.items.map(i=>`<div class="r"><span>${i.q} x ${i.n}</span><span>${money(i.p*i.q)}</span></div>`).join("");
+ return `<div class="c"><div class="logo">Digital<span>Den</span></div><div>Los Santos, San Andreas</div></div><hr>
+ <div class="r"><span><b>${d.doc.toUpperCase()}</b> Nº ${d.no}</span><span>${d.date}</span></div>
+ <div>Cliente: ${d.cli}${d.nif?" · "+d.nif:""}</div><div>Atiende: ${d.emp||"Personal DigitalDen"}</div><hr>${L}<hr>
+ <div class="r"><span>Subtotal</span><span>${money(d.t.sub)}</span></div>
+ ${d.t.dis?`<div class="r"><span>Tarjeta DigitalDen -5%</span><span>-${money(d.t.dis)}</span></div>`:""}
+ ${d.t.tax?`<div class="r"><span>Impuesto</span><span>${money(d.t.tax)}</span></div>`:""}
+ <div class="r t"><span>TOTAL</span><span>${money(d.t.tot)}</span></div>
+ <div>Pago: ${d.pay}</div><hr><div class="c">Garantía de reparaciones: 7 días<br>¡Gracias por conectar con DigitalDen!<br><span class="stamp">PAGADO</span></div>`;
+}
+function show(d){$("rc").innerHTML=build(d);$("rc").style.display="block";$("acts").style.display="flex";$("rc").dataset.txt=
+ `${d.doc.toUpperCase()} ${d.no} · DigitalDen · ${d.date}\nCliente: ${d.cli}\n`+d.items.map(i=>`${i.q} x ${i.n} — ${money(i.p*i.q)}`).join("\n")+`\nTOTAL: ${money(d.t.tot)} (${d.pay})`;
+ $("rc").scrollIntoView({behavior:"smooth",block:"nearest"})}
+$("make").onclick=()=>{
+ const miss=!$("cli").value.trim()?"Falta el nombre del cliente.":!items.length?"Añade al menos un artículo.":"";
+ $("err").textContent=miss;if(miss)return;
+ const d={doc:$("doc").value,no:($("doc").value==="Factura"?"F-":"R-")+pad(seq++),cli:$("cli").value.trim(),nif:$("nif").value.trim(),emp:$("emp").value.trim(),pay:$("pay").value,
+  date:new Date().toLocaleDateString("es-ES",{day:"2-digit",month:"2-digit",year:"numeric"}),day:new Date().toDateString(),items:items.map(i=>({...i})),t:totals()};
+ sales.unshift(d);save();show(d);items=[];drawItems();$("cli").value="";$("nif").value="";renderHist();
+};
+function renderHist(){
+ const td=sales.filter(s=>s.day===new Date().toDateString());
+ $("kn").textContent=td.length;$("kt").textContent=money(td.reduce((a,s)=>a+s.t.tot,0));
+ $("empty").style.display=sales.length?"none":"block";
+ $("hist").innerHTML=sales.slice(0,15).map((s,i)=>`<div class="h" data-i="${i}"><span>${s.no} · ${s.cli}</span><b>${money(s.t.tot)}</b></div>`).join("");
+ document.querySelectorAll(".h").forEach(e=>e.onclick=()=>show(sales[+e.dataset.i]));
+}
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText($("rc").dataset.txt);$("err").textContent="Documento copiado."}catch(e){$("err").textContent="No se pudo copiar automáticamente."}};
+$("clear").onclick=()=>{sales=[];save();renderHist()};
+drawItems();renderHist();
+</script></body></html>
